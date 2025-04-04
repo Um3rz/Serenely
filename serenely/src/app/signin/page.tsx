@@ -17,11 +17,6 @@ export default function SignIn() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -34,10 +29,15 @@ export default function SignIn() {
         password: formData.password
       });
 
-      if (result?.error) {
+      if (!result) {
+        throw new Error("Something went wrong");
+      }
+
+      if (result.error) {
         throw new Error(result.error);
       }
 
+      // If successful, redirect to the home page
       router.push("/");
       router.refresh();
     } catch (error: any) {
@@ -51,7 +51,7 @@ export default function SignIn() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8 px-4 py-8 bg-white shadow rounded-lg">
         <div>
-          <h2 className="text-center text-3xl font-bold">Sign In</h2>
+          <h2 className="text-center text-3xl font-bold">Sign in</h2>
           <p className="mt-2 text-center text-gray-600">
             Sign in to your account
           </p>
@@ -67,37 +67,34 @@ export default function SignIn() {
               {error}
             </div>
           )}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
-
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              value={formData.password}
+              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
           <div>
             <button
               type="submit"
