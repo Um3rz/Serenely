@@ -22,8 +22,6 @@
 | 📓 **Guided Journaling**       | Daily prompts, mood tracking, and progress summaries.                      |
 | 🕵️‍♂️ **Anonymous Community**  | Topic‑based discussion boards—no usernames, no judgment.                   |
 | 🔒 **Privacy First**           | End‑to‑end encryption, no personally identifiable data stored.             |
-| 📈 **Insights & Analytics**    | Visualize your mood trends and journal activity over time.                 |
-| ⚙️ **Customizable Reminders**  | Schedule gentle nudges to check in with yourself.                          |
 
 ---
 
