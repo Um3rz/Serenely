@@ -26,6 +26,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  therapyMessages TherapyMessage[]
+  therapyEntries  TherapyEntry[]
 }
 
 model Account {
@@ -66,4 +68,37 @@ model VerificationToken {
 enum Role{
   USER
   ADMIN
+}
+
+model TherapyMessage {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      MessageRole
+  content   String
+  createdAt DateTime     @default(now())
+}
+
+model TherapyEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  entryDate DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum MessageRole {
+  user
+  assistant
+  system
+}
+
+model Therapist {
+  id      String   @id @default(uuid())
+  name    String
+  address String
+  email   String   @unique
+  createdAt DateTime @default(now())
 }
