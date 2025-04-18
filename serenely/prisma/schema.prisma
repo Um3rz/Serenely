@@ -93,3 +93,11 @@ enum MessageRole {
   assistant
   system
 }
+
+model Therapist {
+  id      String   @id @default(uuid())
+  name    String
+  address String
+  email   String   @unique
+  createdAt DateTime @default(now())
+}
