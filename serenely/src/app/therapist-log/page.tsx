@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/Card"
+import Navbar from "@/components/Navbar"
 
 type Therapist = {
   id: number
@@ -55,7 +56,8 @@ export default function TherapistLogPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
-      <h1 className="text-2xl font-semibold text-teal-600 mb-6">Therapist Log</h1>
+      <Navbar />
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6 mt-15">Therapist Log</h1>
 
       {/* Search and City Filter */}
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">

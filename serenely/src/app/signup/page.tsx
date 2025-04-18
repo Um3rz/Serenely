@@ -53,8 +53,8 @@ export default function SignUp() {
       <div className="flex min-h-screen flex-col items-center justify-center">
         <div className="w-full max-w-md space-y-8 px-4 py-8 bg-white shadow rounded-lg">
           <div>
-            <h2 className="text-center text-3xl font-bold">Success!</h2>
-            <p className="mt-2 text-center text-gray-600">
+            <h2 className="text-center text-3xl font-bold text-black">Success!</h2>
+            <p className="mt-2 text-center text-black">
               Please check your email to verify your account.
             </p>
           </div>
@@ -72,8 +72,8 @@ export default function SignUp() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8 px-4 py-8 bg-white shadow rounded-lg">
         <div>
-          <h2 className="text-center text-3xl font-bold">Sign Up</h2>
-          <p className="mt-2 text-center text-gray-600">
+          <h2 className="text-center text-3xl font-bold text-black">Sign Up</h2>
+          <p className="mt-2 text-center text-black">
             Create your account
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function SignUp() {
           )}
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-black">
                 Name
               </label>
               <input
@@ -95,11 +95,11 @@ export default function SignUp() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-black">
                 Email address
               </label>
               <input
@@ -109,11 +109,11 @@ export default function SignUp() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-black">
                 Password
               </label>
               <input
@@ -123,7 +123,7 @@ export default function SignUp() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
               />
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function SignUp() {
             </button>
           </div>
           <div className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-900">
               Already have an account?{" "}
               <Link href="/signin" className="text-blue-600 hover:text-blue-800">
                 Sign in

@@ -19,7 +19,6 @@ model User {
   email         String    @unique
   password      String
   emailVerified DateTime?
-  city          String
   image         String?
   role          Role      @default(USER) 
   createdAt     DateTime  @default(now())

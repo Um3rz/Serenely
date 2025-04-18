@@ -17,7 +17,6 @@ export default function EntryPage() {
     
     const fetchEntry = async () => {
       try {
-        // This route does not exist in the code above. If you implement
         // "/api/therapy/entry/[id]" you can fetch from there:
         const response = await fetch(`/api/therapy/entry/${id}`);
         const data = await response.json();
