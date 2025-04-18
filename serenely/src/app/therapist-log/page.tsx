@@ -19,6 +19,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
 })
 
+
 type Therapist = {
   id: number
   name: string
@@ -84,7 +85,8 @@ export default function TherapistLogPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
-      <h1 className="text-2xl font-semibold text-teal-600 mb-6">Therapist Log</h1>
+      <Navbar />
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6 mt-15">Therapist Log</h1>
 
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
         <input
