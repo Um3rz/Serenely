@@ -52,7 +52,7 @@ function main() {
                             { name: "Dr. Bilal Qureshi", address: "89 Johar Town, Lahore", email: "bilal.qureshi@example.com" },
                             { name: "Dr. Hira Zafar", address: "150 North Nazimabad Block H, Karachi", email: "hira.zafar@example.com" },
                             { name: "Dr. Farhan Siddiqui", address: "33 G-10/2, Islamabad", email: "farhan.siddiqui@example.com" },
-                            { name: "Dr. Mehwish Anwar", address: "78 DHA Phase 5, Lahore", email: "mehwish.anwar@example.com" },
+                            { name: "Dr. Niaz Ahmad", address: "78 DHA Phase 5, Lahore", email: "niaz.ahmad@example.com" },
                             { name: "Dr. Zohaib Ali", address: "92 PECHS Block 2, Karachi", email: "zohaib.ali@example.com" },
                             { name: "Dr. Nida Hassan", address: "18 E-11/3, Islamabad", email: "nida.hassan@example.com" },
                             { name: "Dr. Taimoor Shah", address: "36 Model Town, Lahore", email: "taimoor.shah@example.com" },
