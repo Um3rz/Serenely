@@ -49,7 +49,7 @@ export default function SignIn() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
-      <div className="w-full max-w-md space-y-8 px-4 py-8 bg-white shadow rounded-lg">
+      <div className="w-full max-w-md space-y-8 px-4 py-8 bg-white shadow rounded-lg text-black">
         <div>
           <h2 className="text-center text-3xl font-bold">Sign in</h2>
           <p className="mt-2 text-center text-gray-600">
@@ -99,7 +99,7 @@ export default function SignIn() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-teal-300"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
@@ -107,7 +107,7 @@ export default function SignIn() {
           <div className="text-center">
             <p className="text-sm text-black">
               Don't have an account?{" "}
-              <Link href="/signup" className="text-blue-600 hover:text-blue-800">
+              <Link href="/signup" className="text-gray-800 hover:text-gray-900">
                 Sign up
               </Link>
             </p>

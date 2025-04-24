@@ -1,19 +1,18 @@
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).end();
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || !session.user?.id) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-  const session = await getServerSession(req, res, authOptions);
-  if (!session || !session.user?.id) { // Check for session and user ID
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+
   const userId = session.user.id;
+  
   try {
-    // Return all entries for the user, sorted by descending entryDate
     const data = await prisma.therapyEntry.findMany({
       where: { userId },
       select: {
@@ -27,9 +26,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
     
-    return res.status(200).json(data);
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error fetching entries:', error);
-    return res.status(500).json({ message: 'Error fetching entries' });
+    return NextResponse.json({ message: 'Error fetching entries' }, { status: 500 });
   }
 }

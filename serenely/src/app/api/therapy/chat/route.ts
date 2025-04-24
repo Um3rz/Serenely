@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       }),
     ]);
     
-    // Create/update journal entry
+    
     const today = new Date().toISOString().split('T')[0]; 
     // Check if entry exists for current day 'today'
     const existingEntry = await prisma.therapyEntry.findFirst({

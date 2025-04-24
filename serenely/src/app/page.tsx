@@ -52,7 +52,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
               <h2 className="text-3xl font-bold mb-4 text-white">Journal Your Way to Better Mental Health</h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-400 mb-6">
                 Our AI analyzes your journal entries to provide insights about your emotional patterns and offers
                 personalized suggestions to improve your wellbeing.
               </p>

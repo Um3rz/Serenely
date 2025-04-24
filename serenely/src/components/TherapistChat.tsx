@@ -88,7 +88,7 @@ export default function TherapyChat({ entryId }: TherapyChatProps) {
       </div> */}
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {messages.map((message, index) => (
-          <div key={index} className={`${message.role === 'user' ? '' : 'text-teal-400'}`}>
+          <div key={index} className={`${message.role === 'user'  ? '' : 'text-slate-100 bg-teal-400 py-2 rounded-xl px-2'}`}>
             <p>{message.content}</p>
           </div>
         ))}

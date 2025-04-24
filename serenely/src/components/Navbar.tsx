@@ -20,8 +20,8 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 pt-5">
-      <div className="container mx-auto px-4">
+    <header className="top-0 left-0 right-0 z-50 transition-all duration-300 pt-5 ">
+      <div className="container mx-auto px-4 bg-transparent">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <span className="text-2xl font-bold text-teal-600">Serenely</span>
@@ -36,7 +36,7 @@ export default function Navbar() {
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === link.href
                     ? "text-teal-600 bg-teal-50"
-                    : "text-slate-700 hover:text-teal-600 hover:bg-slate-100"
+                    : "text-slate-500 hover:text-teal-600 hover:bg-slate-100"
                 }`}
               >
                 {link.name}
