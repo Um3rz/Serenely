@@ -59,7 +59,7 @@ export default function SignUp() {
             </p>
           </div>
           <div className="text-center">
-            <Link href="/signin" className="text-blue-600 hover:text-blue-800">
+            <Link href="/signin" className="text-teal-600 hover:text-teal-800">
               Go to Sign In
             </Link>
           </div>
@@ -95,7 +95,7 @@ export default function SignUp() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 text-gray-900"
               />
             </div>
             <div>
@@ -109,7 +109,7 @@ export default function SignUp() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 text-gray-900"
               />
             </div>
             <div>
@@ -123,7 +123,7 @@ export default function SignUp() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 text-gray-900"
               />
             </div>
           </div>
@@ -132,7 +132,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-teal-300"
             >
               {loading ? "Signing up..." : "Sign up"}
             </button>
@@ -140,7 +140,7 @@ export default function SignUp() {
           <div className="text-center">
             <p className="text-sm text-gray-900">
               Already have an account?{" "}
-              <Link href="/signin" className="text-blue-600 hover:text-blue-800">
+              <Link href="/signin" className="text-teal-600 hover:text-teal-800">
                 Sign in
               </Link>
             </p>
