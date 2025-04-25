@@ -4,14 +4,20 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { URL } from "url";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 // POST: create a new post
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await req.formData();
-    const author = formData.get("author") as string;
     const content = formData.get("content") as string;
     const image = formData.get("image") as File | null;
 
@@ -29,11 +35,28 @@ export async function POST(req: Request) {
       imageUrl = `/uploads/${fileName}`;
     }
 
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     const post = await prisma.post.create({
       data: {
-        author,
+        userId: user.id,
         content,
         imageUrl,
+        reactions: [],
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
       },
     });
 
@@ -54,6 +77,24 @@ export async function GET() {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+        comments: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return NextResponse.json(posts, { status: 200 });
@@ -66,9 +107,14 @@ export async function GET() {
   }
 }
 
-// PATCH: update a post (id passed as query param: ?id=123)
+// PATCH: update a post (reactions, comments, or content)
 export async function PATCH(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const postId = searchParams.get("id");
 
@@ -77,14 +123,89 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { content } = body;
+    const { content, reaction, comment } = body;
 
-    const updatedPost = await prisma.post.update({
-      where: { id: postId },
-      data: { content },
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
     });
 
-    return NextResponse.json(updatedPost, { status: 200 });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (content) {
+      // Update post content
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+      });
+
+      if (post?.userId !== user.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const updatedPost = await prisma.post.update({
+        where: { id: postId },
+        data: { content },
+        include: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json(updatedPost, { status: 200 });
+    }
+
+    if (reaction) {
+      // Add/remove reaction
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+      });
+
+      if (!post) {
+        return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      }
+
+      const reactions = post.reactions || [];
+      const reactionExists = reactions.includes(reaction);
+
+      const updatedPost = await prisma.post.update({
+        where: { id: postId },
+        data: {
+          reactions: reactionExists
+            ? { set: reactions.filter((r) => r !== reaction) }
+            : { push: reaction },
+        },
+      });
+
+      return NextResponse.json(updatedPost, { status: 200 });
+    }
+
+    if (comment) {
+      // Add comment
+      const newComment = await prisma.comment.create({
+        data: {
+          content: comment,
+          postId,
+          userId: user.id,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json(newComment, { status: 201 });
+    }
+
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   } catch (error: any) {
     console.error("PATCH error:", error);
     return NextResponse.json(
@@ -97,11 +218,28 @@ export async function PATCH(req: Request) {
 // DELETE: delete a post (id passed as query param: ?id=123)
 export async function DELETE(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const postId = searchParams.get("id");
 
     if (!postId) {
       return NextResponse.json({ error: "Missing post ID" }, { status: 400 });
+    }
+
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    if (post.userId !== session.user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     await prisma.post.delete({

@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./node_modules/.prisma/client"
 }
 
 datasource db {
@@ -21,6 +22,8 @@ model User {
   sessions        Session[]
   therapyEntries  TherapyEntry[]
   therapyMessages TherapyMessage[]
+  posts           Post[]  
+  comments        Comment[]
 }
 
 model Account {
@@ -86,12 +89,24 @@ model Therapist {
 
 model Post {
   id        String   @id @default(cuid())
-  author    String
+  userId    String
   content   String
   imageUrl  String?
+  reactions String[]
+  comments  Comment[]
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  content   String             
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 enum Role {
   USER
   ADMIN
