@@ -1,4 +1,3 @@
-// File: app/post/page.tsx
 "use client";
 import NavBar from "@/components/Navbar";
 import { PostList } from "@/components/PostFeature";

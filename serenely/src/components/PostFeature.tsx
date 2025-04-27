@@ -1,16 +1,13 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Smile, MessageCircle, ThumbsUp } from "lucide-react";
-import Picker from "@emoji-mart/react";
-import data from "@emoji-mart/data";
+import { MessageCircle, ThumbsUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 type Post = {
   id: string;
   content: string;
   imageUrl?: string;
-  reactions: string[];
   comments: Comment[];
   createdAt: string;
   user: {
@@ -80,24 +77,6 @@ function PostCard({ post, onUpdate }: PostCardProps) {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const handleReaction = async (emoji: string) => {
-    if (!session?.user) return;
-
-    try {
-      await fetch(`/api/posts?id=${post.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ reaction: emoji }),
-      });
-      onUpdate();
-    } catch (error) {
-      console.error("Error adding reaction:", error);
-    }
-  };
 
   const handleComment = async () => {
     if (!session?.user || !comment.trim()) return;
@@ -124,7 +103,7 @@ function PostCard({ post, onUpdate }: PostCardProps) {
 
   const toggleComments = () => {
     setShowComments(!showComments);
-    setShowCommentInput(false); // Reset comment input when toggling comments
+    setShowCommentInput(false);
   };
 
   return (
@@ -155,13 +134,6 @@ function PostCard({ post, onUpdate }: PostCardProps) {
 
       <div className="flex gap-4 mb-4">
         <button
-          onClick={() => handleReaction("👍")}
-          className="flex items-center gap-1 text-gray-600 hover:text-teal-500"
-        >
-          <ThumbsUp size={16} />
-          <span>{post.reactions.filter(r => r === "👍").length}</span>
-        </button>
-        <button
           onClick={toggleComments}
           className={`flex items-center gap-1 ${
             showComments ? "text-teal-500" : "text-gray-600 hover:text-teal-500"
@@ -170,105 +142,56 @@ function PostCard({ post, onUpdate }: PostCardProps) {
           <MessageCircle size={16} />
           <span>{post.comments.length}</span>
         </button>
-        <button
-          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className="flex items-center gap-1 text-gray-600 hover:text-teal-500"
-        >
-          <Smile size={16} />
-        </button>
       </div>
 
-      {showEmojiPicker && (
-        <div className="mb-4">
-          <Picker
-            data={data}
-            onEmojiSelect={(emoji: any) => {
-              handleReaction(emoji.native);
-              setShowEmojiPicker(false);
-            }}
-            theme="light"
-          />
-        </div>
-      )}
-
-      {post.reactions.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-4 p-2 bg-gray-50 rounded">
-          {Array.from(new Set(post.reactions)).map((emoji, index) => (
-            <span key={index} className="text-lg">
-              {emoji} {post.reactions.filter(r => r === emoji).length}
-            </span>
+      {showComments && post.comments.length > 0 && (
+        <div className="space-y-2 mb-4">
+          {post.comments.map((comment) => (
+            <div key={comment.id} className="bg-gray-50 p-2 rounded">
+              <div className="flex items-center gap-2">
+                {comment.user.image && (
+                  <img
+                    src={comment.user.image}
+                    alt={comment.user.name || "User"}
+                    className="w-6 h-6 rounded-full"
+                  />
+                )}
+                <span className="font-semibold">{comment.user.name}</span>
+                <span className="text-sm text-gray-500">
+                  {formatDate(comment.createdAt)}
+                </span>
+              </div>
+              <p className="mt-1">{comment.content}</p>
+            </div>
           ))}
         </div>
       )}
 
-      {showComments && (
-        <div className="border-t pt-4 mt-4">
-          {!showCommentInput && (
-            <button
-              onClick={() => setShowCommentInput(true)}
-              className="text-teal-600 hover:text-teal-700 text-sm mb-4"
-            >
-              Write a comment...
-            </button>
-          )}
-
-          {showCommentInput && (
-            <div className="mb-4 flex gap-2">
-              <input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Write a comment..."
-                className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    setShowCommentInput(false);
-                  }
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    if (comment.trim()) {
-                      handleComment();
-                    }
-                  }
-                }}
-              />
-              <button
-                onClick={handleComment}
-                disabled={!comment.trim()}
-                className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 disabled:bg-gray-300"
-              >
-                Comment
-              </button>
-            </div>
-          )}
-
-          {post.comments.length > 0 && (
-            <div className="space-y-3">
-              {post.comments.map((comment) => (
-                <div key={comment.id} className="flex gap-2 items-start">
-                  {comment.user.image && (
-                    <img
-                      src={comment.user.image}
-                      alt={comment.user.name || "User"}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
-                  <div className="flex-1 bg-gray-50 rounded-lg p-2">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-semibold text-sm">
-                        {comment.user.name || "Anonymous"}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {formatDate(comment.createdAt)}
-                      </span>
-                    </div>
-                    <p className="text-sm">{comment.content}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      {showCommentInput && (
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Write a comment..."
+            className="flex-1 p-2 border rounded"
+          />
+          <button
+            onClick={handleComment}
+            className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600"
+          >
+            Post
+          </button>
         </div>
+      )}
+
+      {!showCommentInput && session?.user && (
+        <button
+          onClick={() => setShowCommentInput(true)}
+          className="text-gray-600 hover:text-teal-500"
+        >
+          Write a comment...
+        </button>
       )}
     </div>
   );
@@ -282,7 +205,6 @@ export default function CreatePostModal({ onPostCreated }: CreatePostModalProps)
   const { data: session } = useSession();
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async () => {
@@ -300,7 +222,6 @@ export default function CreatePostModal({ onPostCreated }: CreatePostModalProps)
 
     setContent("");
     setImage(null);
-    setShowEmojiPicker(false);
     onPostCreated();
   };
 
@@ -311,10 +232,6 @@ export default function CreatePostModal({ onPostCreated }: CreatePostModalProps)
   };
 
   const canPost = content.trim() !== "" || image !== null;
-
-  const addEmoji = (emoji: any) => {
-    setContent((prev) => prev + emoji.native);
-  };
 
   if (!session?.user) {
     return null;
@@ -343,22 +260,7 @@ export default function CreatePostModal({ onPostCreated }: CreatePostModalProps)
           </span>
           <span>Add Photo</span>
         </button>
-
-        <button
-          type="button"
-          className="flex items-center gap-1 cursor-pointer"
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
-        >
-          <Smile size={16} />
-          <span>Emoji</span>
-        </button>
       </div>
-
-      {showEmojiPicker && (
-        <div className="mt-2 z-50">
-          <Picker data={data} onEmojiSelect={addEmoji} theme="light" />
-        </div>
-      )}
 
       <input
         type="file"

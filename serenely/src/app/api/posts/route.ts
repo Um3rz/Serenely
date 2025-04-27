@@ -1,15 +1,12 @@
-// File: app/api/posts/route.ts
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { URL } from "url";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
 
-// POST: create a new post
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -48,7 +45,6 @@ export async function POST(req: Request) {
         userId: user.id,
         content,
         imageUrl,
-        reactions: [],
       },
       include: {
         user: {
@@ -107,7 +103,7 @@ export async function GET() {
   }
 }
 
-// PATCH: update a post (reactions, comments, or content)
+// PATCH: update a post (content or comments)
 export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -123,7 +119,7 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { content, reaction, comment } = body;
+    const { content, comment } = body;
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
@@ -159,31 +155,6 @@ export async function PATCH(req: Request) {
       return NextResponse.json(updatedPost, { status: 200 });
     }
 
-    if (reaction) {
-      // Add/remove reaction
-      const post = await prisma.post.findUnique({
-        where: { id: postId },
-      });
-
-      if (!post) {
-        return NextResponse.json({ error: "Post not found" }, { status: 404 });
-      }
-
-      const reactions = post.reactions || [];
-      const reactionExists = reactions.includes(reaction);
-
-      const updatedPost = await prisma.post.update({
-        where: { id: postId },
-        data: {
-          reactions: reactionExists
-            ? { set: reactions.filter((r: string) => r !== reaction) }
-            : { push: reaction },
-        },
-      });
-
-      return NextResponse.json(updatedPost, { status: 200 });
-    }
-
     if (comment) {
       // Add comment
       const newComment = await prisma.comment.create({
@@ -205,7 +176,10 @@ export async function PATCH(req: Request) {
       return NextResponse.json(newComment, { status: 201 });
     }
 
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid request - missing content or comment" },
+      { status: 400 }
+    );
   } catch (error: any) {
     console.error("PATCH error:", error);
     return NextResponse.json(

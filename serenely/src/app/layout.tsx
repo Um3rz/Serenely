@@ -6,8 +6,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Authentication App",
-  description: "Next.js App Router Authentication with Email Verification",
+  title: "Serenely - Your Personalized Assistant",
+  description: "Your personal assistant for all your needs",
 };
 
 export default function RootLayout({
