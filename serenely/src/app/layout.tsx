@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Serenely - Your Mental Wellness Journey Starts Here",
+  title: "Authentication App",
   description: "Next.js App Router Authentication with Email Verification",
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
