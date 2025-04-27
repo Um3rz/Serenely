@@ -1,5 +1,7 @@
+'use client';
+
 import TherapyChat from '@/components/TherapistChat';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 interface Entry {
@@ -8,8 +10,8 @@ interface Entry {
 }
 
 export default function EntryPage() {
-  const router = useRouter();
-  const { id } = router.query;
+  const params = useParams();
+  const id = params.id;
   const [entry, setEntry] = useState<Entry | null>(null);
 
   useEffect(() => {
@@ -33,6 +35,5 @@ export default function EntryPage() {
     return <div className="p-4 text-white">Loading...</div>;
   }
 
-  // Pass entryId to TherapyChat if desired
   return <TherapyChat entryId={typeof id === 'string' ? id : ''} />;
 }

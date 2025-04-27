@@ -38,9 +38,9 @@ export async function POST(req: Request) {
         content: `You are a supportive mental health AI therapist. Your name is Serenely.Your approach is empathetic and based on evidence-based therapeutic techniques. 
         Keep responses concise and thoughtful. Listen carefully and reflect back what you hear. `
       },
-      ...history.map((h) => ({ 
-        role: h.role as 'system' | 'user' | 'assistant', 
-        content: h.content 
+      ...history.map((h: ChatCompletionMessageParam) => ({
+        role: h.role as 'system' | 'user' | 'assistant',
+        content: h.content
       })),
       { role: 'user', content: message },
     ];

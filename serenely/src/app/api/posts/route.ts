@@ -176,7 +176,7 @@ export async function PATCH(req: Request) {
         where: { id: postId },
         data: {
           reactions: reactionExists
-            ? { set: reactions.filter((r) => r !== reaction) }
+            ? { set: reactions.filter((r: string) => r !== reaction) }
             : { push: reaction },
         },
       });
