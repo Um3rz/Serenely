@@ -10,24 +10,36 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const posts = await prisma.post.findMany({
-      select: {
-        id: true,
-        userId: true,
-        content: true,
-        imageUrl: true,
-        createdAt: true,
-        user: {
+    let retries = 3;
+    let posts;
+    
+    while (retries > 0) {
+      try {
+        posts = await prisma.post.findMany({
           select: {
-            name: true,
-            email: true,
+            id: true,
+            userId: true,
+            content: true,
+            imageUrl: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
           },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+        break;
+      } catch (error) {
+        retries--;
+        if (retries === 0) throw error;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
 
     return NextResponse.json(posts);
   } catch (error) {
