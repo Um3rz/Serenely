@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
-import { Trash2, User, FileText } from "lucide-react";
+import {  User, FileText } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 
@@ -33,7 +33,6 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [activeTab, setActiveTab] = useState<"users" | "posts">("users");
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || !isAdmin)) {
@@ -55,51 +54,6 @@ export default function AdminDashboard() {
     }
   }, [isAdmin]);
 
-  const handleDeleteUser = async (userId: string) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      setIsDeleting(true);
-      try {
-        const res = await fetch(`/api/admin/users/${userId}`, {
-          method: "DELETE",
-        });
-
-        if (res.ok) {
-          setUsers(users.filter((user) => user.id !== userId));
-        } else {
-          alert("Failed to delete user");
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("An error occurred while deleting the user");
-      } finally {
-        setIsDeleting(false);
-      }
-    }
-  };
-
-const handleDeletePost = async (postId: string) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      setIsDeleting(true);
-      try {
-        const res = await fetch(`/api/admin/posts/${postId}`, {
-          method: "DELETE",
-        });
-  
-        if (res.ok) {
-          const updatedPosts = await fetch("/api/admin/posts").then(res => res.json());
-          setPosts(updatedPosts);
-        } else {
-          const errorData = await res.json();
-          alert(errorData.message || "Failed to delete post");
-        }
-      } catch (error) {
-        console.error("Error deleting post:", error);
-        alert("An error occurred while deleting the post");
-      } finally {
-        setIsDeleting(false);
-      }
-    }
-  };
   if (isLoading || !isAuthenticated || !isAdmin) {
     return (
       <div className="min-h-screen bg-gray-900">
@@ -122,7 +76,7 @@ const handleDeletePost = async (postId: string) => {
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-6">
           <button
-            className={`py-2 px-4 font-medium  text-white text-sm ${
+            className={`py-2 px-4 font-medium text-white text-sm ${
               activeTab === "users"
                 ? "border-b-2 border-teal-600 text-teal-600"
                 : "text-gray-500 hover:text-gray-700"
@@ -167,9 +121,6 @@ const handleDeletePost = async (postId: string) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Joined
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -181,7 +132,7 @@ const handleDeletePost = async (postId: string) => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm text-gray-900">{user.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -196,24 +147,6 @@ const handleDeletePost = async (postId: string) => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(user.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => handleDeleteUser(user.id)}
-                          disabled={isDeleting || user.role === "ADMIN"}
-                          className={`text-red-600 hover:text-red-900 ${
-                            isDeleting || user.role === "ADMIN"
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }`}
-                          title={
-                            user.role === "ADMIN"
-                              ? "Cannot delete admin users"
-                              : "Delete user"
-                          }
-                        >
-                          <Trash2 size={18} />
-                        </button>
                       </td>
                     </tr>
                   ))}
@@ -236,9 +169,6 @@ const handleDeletePost = async (postId: string) => {
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Posted
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -265,17 +195,6 @@ const handleDeletePost = async (postId: string) => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(post.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => handleDeletePost(post.id)}
-                          disabled={isDeleting}
-                          className={`text-red-600 hover:text-red-900 ${
-                            isDeleting ? "opacity-50 cursor-not-allowed" : ""
-                          }`}
-                        >
-                          <Trash2 size={18} />
-                        </button>
                       </td>
                     </tr>
                   ))}
