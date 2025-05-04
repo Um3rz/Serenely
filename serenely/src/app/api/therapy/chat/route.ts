@@ -38,16 +38,23 @@ export async function POST(req: Request) {
         content: `You are a supportive mental health AI therapist. Your name is Serenely.Your approach is empathetic and based on evidence-based therapeutic techniques. 
         Keep responses concise and thoughtful. Listen carefully and reflect back what you hear. `
       },
-      ...history.map((h: ChatCompletionMessageParam) => ({
-        role: h.role as 'system' | 'user' | 'assistant',
-        content: h.content
-      })),
+      ...history.map((h) => {
+        if (h.role === 'system') {
+          return { role: 'system', content: h.content } as const
+        }
+        if (h.role === 'user') {
+          return { role: 'user', content: h.content } as const
+        }
+        return { role: 'assistant', content: h.content } as const
+      }),
       { role: 'user', content: message },
     ];
-    
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: messagesArray,
+      model: 'o3-mini',
+      messages: messagesArray.map((message) => ({
+        role: message.role,
+        content: message.content,
+      })) as ChatCompletionMessageParam[],
     });
 
     const aiResponse = completion.choices[0].message?.content || '';
