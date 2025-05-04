@@ -73,7 +73,7 @@ export default function JournalList() {
       <div className="flex-1 overflow-y-auto">
         {Array.isArray(entries) && entries.length > 0 ? (
           entries.map((entry) => (
-            <Link href={`/entry/${entry.id}`} key={entry.id}>
+            <Link href={`/journal/new-entry`} key={entry.id}>
               <div className="m-4 p-4 bg-gray-800 rounded-lg">
                 <h2 className="text-white">{entry.title}</h2>
                 <p className="text-gray-400">

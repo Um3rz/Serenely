@@ -7,11 +7,11 @@ interface Message {
   timestamp: string;
 }
 
-interface TherapyChatProps {
-  entryId?: string;
-}
+// interface TherapyChatProps {
+//   entryId?: string;
+// }
 
-export default function TherapyChat({ entryId }: TherapyChatProps) {
+export default function TherapyChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -53,8 +53,10 @@ export default function SignUp() {
       }
 
       setSuccess(true);
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,4 @@
 import { useSession,signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 //custom hook to check if user is authenticated -add more here
 export function useAuth() {

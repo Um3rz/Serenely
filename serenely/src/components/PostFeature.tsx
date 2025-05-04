@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { MessageCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 type Post = {
   id: string;
@@ -112,9 +113,11 @@ function PostCard({ post, onUpdate }: PostCardProps) {
     <div className="bg-white rounded-xl shadow-md p-4 text-black">
       <div className="flex items-center gap-2 mb-3">
         {post.user.image && (
-          <img
+          <Image
             src={post.user.image}
             alt={post.user.name || "User"}
+            width={50}
+            height={50}
             className="w-10 h-10 rounded-full"
           />
         )}
@@ -127,9 +130,11 @@ function PostCard({ post, onUpdate }: PostCardProps) {
       <p className="mb-4">{post.content}</p>
 
       {post.imageUrl && (
-        <img
+        <Image
           src={post.imageUrl}
           alt="Post attachment"
+          width={500}
+          height={300}
           className="max-w-full rounded-lg mb-4"
         />
       )}
@@ -152,9 +157,11 @@ function PostCard({ post, onUpdate }: PostCardProps) {
             <div key={comment.id} className="bg-gray-50 p-2 rounded">
               <div className="flex items-center gap-2">
                 {comment.user.image && (
-                  <img
+                  <Image
                     src={comment.user.image}
                     alt={comment.user.name || "User"}
+                    width={50}
+                    height={50}
                     className="w-6 h-6 rounded-full"
                   />
                 )}

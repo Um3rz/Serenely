@@ -57,8 +57,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(post, { status: 201 });
-  } catch (error: any) {
-    console.error("POST error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("POST error:", error.message);
+    }
     return NextResponse.json(
       { error: "Failed to create post" },
       { status: 500 }
@@ -93,8 +95,10 @@ export async function GET() {
     });
 
     return NextResponse.json(posts, { status: 200 });
-  } catch (error: any) {
-    console.error("GET error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("GET error:", error.message);
+    }
     return NextResponse.json(
       { error: "Failed to fetch posts" },
       { status: 500 }
@@ -177,8 +181,10 @@ export async function PATCH(req: Request) {
       { error: "Invalid request - missing content or comment" },
       { status: 400 }
     );
-  } catch (error: any) {
-    console.error("PATCH error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("PATCH error:", error.message);
+    }
     return NextResponse.json(
       { error: "Failed to update post" },
       { status: 500 }
@@ -225,8 +231,10 @@ export async function DELETE(req: Request) {
     });
 
     return NextResponse.json({ message: "Post deleted" }, { status: 200 });
-  } catch (error: any) {
-    console.error("DELETE error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("DELETE error:", error.message);
+    }
     return NextResponse.json(
       { error: "Failed to delete post" },
       { status: 500 }

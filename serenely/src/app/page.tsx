@@ -67,7 +67,7 @@ export default function Home() {
               </div>
               <div className="bg-teal-100 p-4 rounded-lg ml-8">
                 <p className="text-gray-700">
-                  I've been feeling a bit overwhelmed with work lately, but I managed to take some time for myself
+                  I&apos;ve been feeling a bit overwhelmed with work lately, but I managed to take some time for myself
                   today.
                 </p>
               </div>

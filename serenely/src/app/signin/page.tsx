@@ -1,11 +1,17 @@
 "use client";
-
-import { useState, FormEvent } from "react";
+import { useState ,Suspense} from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function SignIn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInContent />
+    </Suspense>
+  );
+}
+function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const verified = searchParams.get("verified");
@@ -17,7 +23,7 @@ export default function SignIn() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -40,8 +46,10 @@ export default function SignIn() {
       // If successful, redirect to the home page
       router.push("/");
       router.refresh();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -106,7 +114,7 @@ export default function SignIn() {
           </div>
           <div className="text-center">
             <p className="text-sm text-black">
-              Don't have an account?{" "}
+               Don&apos;t have an account?
               <Link href="/signup" className="text-gray-800 hover:text-gray-900">
                 Sign up
               </Link>

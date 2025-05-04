@@ -1,38 +1,60 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+// Note: Using standard Request instead of NextRequest
 export async function DELETE(
-  req: NextRequest,
+  request: Request,
   { params }: { params: { postId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
+    
     if (!session?.user || session.user.role !== "ADMIN") {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Unauthorized: Admin access required" },
+        { status: 401 }
+      );
     }
-
-    const postId = params.postId;
+    
+    const { postId } = params;
+    
     if (!postId) {
-      return NextResponse.json({ message: "Post ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Post ID is required" },
+        { status: 400 }
+      );
     }
-
-    const post = await prisma.post.findUnique({
+    
+    const existingPost = await prisma.post.findUnique({
       where: { id: postId },
     });
-
-    if (!post) {
-      return NextResponse.json({ message: "Post not found" }, { status: 404 });
+    
+    if (!existingPost) {
+      return NextResponse.json(
+        { message: "Post not found" },
+        { status: 404 }
+      );
     }
-
-    await prisma.post.delete({
-      where: { id: postId },
-    });
-
-    return NextResponse.json({ message: "Post deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting post:", error);
+    
+    await prisma.$transaction([
+      prisma.comment.deleteMany({
+        where: { postId },
+      }),
+      prisma.post.delete({
+        where: { id: postId },
+      }),
+    ]);
+    
+    return NextResponse.json(
+      { message: "Post and associated comments deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("[ADMIN_POST_DELETE_ERROR]", error.message);
+    }
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
