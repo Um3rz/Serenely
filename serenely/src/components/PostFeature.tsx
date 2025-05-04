@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { MessageCircle, ThumbsUp } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 type Post = {
@@ -33,6 +33,8 @@ type PostListProps = {
 export function PostList({ onPostCreated }: PostListProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+
+  
 
   const fetchPosts = async () => {
     try {
@@ -289,7 +291,7 @@ export default function CreatePostModal({ onPostCreated }: CreatePostModalProps)
           className={`px-4 py-2 rounded-lg ${
             canPost
               ? "bg-teal-600 text-white hover:bg-teal-700"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-black text-gray-200 cursor-not-allowed"
           }`}
           onClick={handleSubmit}
           disabled={!canPost}

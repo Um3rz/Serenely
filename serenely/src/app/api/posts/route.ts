@@ -66,7 +66,6 @@ export async function POST(req: Request) {
   }
 }
 
-// GET: fetch all posts
 export async function GET() {
   try {
     const posts = await prisma.post.findMany({
@@ -102,8 +101,6 @@ export async function GET() {
     );
   }
 }
-
-// PATCH: update a post (content or comments)
 export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -189,7 +186,6 @@ export async function PATCH(req: Request) {
   }
 }
 
-// DELETE: delete a post (id passed as query param: ?id=123)
 export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -212,8 +208,16 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    if (post.userId !== session.user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (post.userId !== user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     await prisma.post.delete({

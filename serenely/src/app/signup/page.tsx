@@ -14,15 +14,29 @@ export default function SignUp() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (name === 'password') {
+      setPasswordError(null);
+      if (value.length > 0 && value.length < 8) {
+        setPasswordError('Password must be at least 8 characters long');
+      }
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    if (formData.password.length < 8) {
+      setPasswordError('Password must be at least 8 characters long');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -123,8 +137,13 @@ export default function SignUp() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 text-gray-900"
+                className={`mt-1 block w-full px-3 py-2 border ${
+                  passwordError ? 'border-red-500' : 'border-gray-300'
+                } rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 text-gray-900`}
               />
+              {passwordError && (
+                <p className="mt-1 text-sm text-red-600">{passwordError}</p>
+              )}
             </div>
           </div>
 

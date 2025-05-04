@@ -111,7 +111,7 @@ export default function TherapistLogPage() {
           ))}
         </select>
 
-        <Button variant="outline" onClick={() => setShowMap(!showMap)}>
+        <Button className="bg-black text-gray-200" onClick={() => setShowMap(!showMap)}>
           {showMap ? "Close Map" : "Map View"}
         </Button>
       </div>

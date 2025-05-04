@@ -16,7 +16,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if user already exists
+    if (password.length < 8) {
+      return NextResponse.json(
+        { message: "Password must be at least 8 characters long" },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email }
     });
@@ -28,10 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
     const user = await prisma.user.create({
       data: {
         name,
@@ -39,8 +42,6 @@ export async function POST(req: NextRequest) {
         password: hashedPassword
       }
     });
-
-    // Create verification token
     const token = crypto.randomBytes(32).toString("hex");
     await prisma.verificationToken.create({
       data: {
@@ -50,7 +51,6 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    // Send verification email
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_SERVER_HOST,
       port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),

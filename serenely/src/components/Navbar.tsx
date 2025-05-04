@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Shield } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Button } from "./ui/Button"
 import { useAuth } from "@/lib/hooks"
@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/hooks"
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, isAdmin, logout } = useAuth()
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -33,7 +33,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-4 text-gray-300 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === link.href
                     ? "text-teal-600 bg-teal-50"
                     : "text-slate-500 hover:text-teal-600 hover:bg-slate-100"
@@ -47,9 +47,18 @@ export default function Navbar() {
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex items-center space-x-4">
             {isAuthenticated ? (
-              <Button onClick={logout} className="bg-teal-600 hover:bg-teal-700">
-                Logout
-              </Button>
+              <>
+                {isAdmin && (
+                  <Link href="/admin" className="relative">
+                    <div className="p-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+                      <Shield size={20} />
+                    </div>
+                  </Link>
+                )}
+                <Button onClick={logout} className="bg-teal-600 hover:bg-teal-700">
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Link href="/signin">
@@ -94,15 +103,25 @@ export default function Navbar() {
             ))}
             <div className="flex flex-col space-y-2 pt-2 border-t">
               {isAuthenticated ? (
-                <Button
-                  onClick={() => {
-                    logout()
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className="w-full bg-teal-600 hover:bg-teal-700"
-                >
-                  Logout
-                </Button>
+                <>
+                  {isAdmin && (
+                    <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button className="w-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center">
+                        <Shield size={18} className="mr-2" />
+                        Admin Dashboard
+                      </Button>
+                    </Link>
+                  )}
+                  <Button
+                    onClick={() => {
+                      logout()
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className="w-full bg-teal-600 hover:bg-teal-700"
+                  >
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <>
                   <Link href="/signin">

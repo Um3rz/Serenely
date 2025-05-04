@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 
 interface Entry {
   id: string;
-  // Additional fields as needed
 }
 
 export default function EntryPage() {
@@ -19,7 +18,6 @@ export default function EntryPage() {
     
     const fetchEntry = async () => {
       try {
-        // "/api/therapy/entry/[id]" you can fetch from there:
         const response = await fetch(`/api/therapy/entry/${id}`);
         const data = await response.json();
         setEntry(data);
