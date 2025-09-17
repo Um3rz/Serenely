@@ -1,5 +1,6 @@
 # Serenely
 <img width="849" alt="image" src="https://github.com/user-attachments/assets/62df44cc-b035-4f89-b683-54afe52b4876" />
+<img width="865" height="383" alt="image" src="https://github.com/user-attachments/assets/6bfd2ec8-e478-470d-b241-0293b4fbc8b9" />
 
 > **Your AI‑powered mental wellness companion**  
 > An AI therapist chatbot with guided journaling and an anonymous peer‑support community.
