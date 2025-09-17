@@ -29,10 +29,11 @@
 ## Tech Stack
 
 - **Frontend**: React, Next.js, Tailwind CSS  
-- **Backend**: Node.js, Express  
-- **AI & NLP**: OpenAI GPT‑4 API (or similar)  
-- **Database**: Postgres (for journals & community posts)  
-- **Auth & Security**: JWT, bcrypt, HTTPS  
+- **Backend**: NextJS backend deployed on AWS Fargate scaled using ECS(elastic container service)
+- **AI & NLP**: OpenAI GPT‑4 API (or similar)  , OpenAI agent SDK
+- **Database**: Postgres (for journals & community posts)  on AWS Aurora Serverless
+- **Auth & Security**: JWT, bcrypt, HTTPS
+  
 
 ---
 
