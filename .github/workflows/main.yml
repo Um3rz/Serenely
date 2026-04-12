@@ -1,24 +1,21 @@
-name: Ping Neon Postgres Keep-Alive
+name: Neon DB Keep-Alive
 
 on:
   schedule:
-    # Runs at minute 0 past every hour
-    - cron: '0 * * * *'
-  workflow_dispatch: # Allows you to trigger the action manually for testing
+    - cron: "0 0,3,6,9,12,15,18,21 * * *" # Every 3 hours, 8x/day (UTC)
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
-  ping-database:
+  ping:
+    name: Ping Neon Postgres
     runs-on: ubuntu-latest
+    timeout-minutes: 2
 
     steps:
-      - name: Ping Neon DB
+      - name: Ping database
         env:
-          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          if [ -z "$DATABASE_URL" ]; then
-            echo "Error: NEON_DATABASE_URL secret is not set."
-            exit 1
-          fi
-          
-          # Connects to the DB and runs a lightweight query to wake it up
-          psql "$DATABASE_URL" -c "SELECT 1;"
+          echo "Pinging Neon DB at $(date -u)"
+          psql "$DATABASE_URL" -c "SELECT 1;" --no-password
+          echo "Ping successful ✓"
