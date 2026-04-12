@@ -1,20 +1,46 @@
 # Serenely
-<img width="849" alt="image" src="https://github.com/user-attachments/assets/62df44cc-b035-4f89-b683-54afe52b4876" />
-<img width="865" height="383" alt="image" src="https://github.com/user-attachments/assets/6bfd2ec8-e478-470d-b241-0293b4fbc8b9" />
-<img width="320" height="363" alt="image" src="https://github.com/user-attachments/assets/1b5f66f6-47e6-4444-9088-b98db1e124aa" />
 
 > **Your AI‑powered mental wellness companion**  
-> An AI therapist chatbot with guided journaling and an anonymous peer‑support community.
 
-## About
+Serenely is a modern, AI-powered mental health chatbot designed to serve as an empathetic, trauma-informed therapist. 
 
-**Serenely** is an AI‑driven mental wellness app designed to help you explore your thoughts, manage stress, and connect with others—all in a safe, anonymous environment.  
+## Recent Updates
 
-- **AI Therapist**: Chat with an AI that listens empathetically and offers therapeutic insights.  
-- **Guided Journaling**: Structured prompts to help you reflect and grow.  
-- **Anonymous Community**: Share experiences and support peers without revealing your identity.
+- **Premium UI Overhaul**: Redesigned frontend components with modern TailwindCSS styling, featuring a premium dark theme.
+- **Voice-to-Text Integration**: Added a native Web Speech API voice-to-text feature to allow users to interact with the therapist chatbot via voice.
+- **Enhanced AI Persona**: Updated the AI's system prompt to function as a more empathetic, trauma-informed therapist.
+- **Backend & Database Fixes**: Updated backend chat logic and resolved environment-specific Prisma module dependencies for a more stable deployment.
 
----
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Styling:** TailwindCSS
+- **Database:** Prisma ORM
+- **Voice APIs:** Native Web Speech API
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
 
 ## Features
 
@@ -26,30 +52,4 @@
 | 🔒 **Privacy First**           | End‑to‑end encryption, no personally identifiable data stored.             |
 
 ---
-
-## Tech Stack
-
-- **Frontend**: React, Next.js, Tailwind CSS  
-- **Backend**: NextJS backend deployed on AWS Fargate scaled using ECS(elastic container service)
-- **AI & NLP**: OpenAI GPT‑4 API (or similar)  , OpenAI agent SDK
-- **Database**: Postgres (for journals & community posts)  on AWS Aurora Serverless
-- **Auth & Security**: JWT, bcrypt, HTTPS
-  
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js ≥ 16  
-- npm or Yarn  
-- OpenAI API key  
-
-### Installation
-
-1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/your‑org/serenely.git
-   cd serenely
 
