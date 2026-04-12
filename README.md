@@ -1,4 +1,5 @@
 # Serenely
+<img width="1522" height="922" alt="image" src="https://github.com/user-attachments/assets/ecdd8e97-9581-425f-97f7-6894dc66d36c" />
 
 > **Your AI‑powered mental wellness companion**  
 
@@ -11,12 +12,15 @@ Serenely is a modern, AI-powered mental health chatbot designed to serve as an e
 - **Enhanced AI Persona**: Updated the AI's system prompt to function as a more empathetic, trauma-informed therapist.
 - **Backend & Database Fixes**: Updated backend chat logic and resolved environment-specific Prisma module dependencies for a more stable deployment.
 
+<img width="1858" height="902" alt="image" src="https://github.com/user-attachments/assets/ca37e05e-4121-4ee8-94de-65756414e197" />
+
 ## Tech Stack
 
 - **Framework:** Next.js (App Router)
 - **Styling:** TailwindCSS
 - **Database:** Prisma ORM
 - **Voice APIs:** Native Web Speech API
+<img width="1911" height="898" alt="image" src="https://github.com/user-attachments/assets/c316dcf5-6fc0-4534-9448-0e96e95fd31f" />
 
 ## Getting Started
 
